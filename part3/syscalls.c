@@ -4,7 +4,6 @@
 #include <linux/module.h>
 #include <linux/syscalls.h>
 
-/* Pointers filled in by the elevator module when it is loaded */
 int (*STUB_start_elevator)(void) = NULL;
 int (*STUB_issue_request)(int, int, int) = NULL;
 int (*STUB_stop_elevator)(void) = NULL;
