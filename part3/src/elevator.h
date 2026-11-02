@@ -23,10 +23,10 @@ enum elevator_state
 
 enum pet_type
 {
-    PET_CHIHUAHUA,
-    PET_PUG,
-    PET_PUGHUAHUA,
-    PET_DACKSHUND,
+    PET_CHIHUAHUA = 0,
+    PET_PUG = 1,
+    PET_PUGHUAHUA = 2,
+    PET_DACHSHUND = 3,
 };
 
 struct pet
@@ -42,13 +42,23 @@ struct elevator
 {
     struct mutex lock;
     enum elevator_state state;
-    bool is_moving;
+    bool is_active;
     bool is_stopping;
     int current_floor;
     int current_weight;
     int onboard_pet_count;  // in elevator
-    int waiting_pet_count;  // waiting on a floor
+    int waiting_pet_count;  // alls pets waiting on all floor
     int serviced_pet_count; // pets that have been serviced
     struct list_head pets_onboard;
     struct list_head waiting[ELEVATOR_MAX_FLOOR];
-}
+};
+
+int elevator_thread(void *data);
+
+bool elevator_has_floor_work_locked(struct elevator *elevator);
+
+void elevator_service_floor_locked(struct elevator *elevator);
+
+int elevator_choose_next_floor_locked(struct elevator *elevator);
+
+#endif /* PET_ELEVATOR_H */
