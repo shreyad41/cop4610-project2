@@ -16,7 +16,6 @@ enum elevator_state
 {
     ELEVATOR_OFFLINE,
     ELEVATOR_IDLE,
-    ELEVATOR_MOVING,
     ELEVATOR_LOADING,
     ELEVATOR_UP,
     ELEVATOR_DOWN,
@@ -29,3 +28,27 @@ enum pet_type
     PET_PUGHUAHUA,
     PET_DACKSHUND,
 };
+
+struct pet
+{
+    struct list_head node;
+    int start_floor;
+    int destination_floor;
+    enum pet_type type;
+    int weight;
+};
+
+struct elevator
+{
+    struct mutex lock;
+    enum elevator_state state;
+    bool is_moving;
+    bool is_stopping;
+    int current_floor;
+    int current_weight;
+    int onboard_pet_count;  // in elevator
+    int waiting_pet_count;  // waiting on a floor
+    int serviced_pet_count; // pets that have been serviced
+    struct list_head pets_onboard;
+    struct list_head waiting[ELEVATOR_MAX_FLOOR];
+}
