@@ -4,7 +4,6 @@
 
 static const int pet_weights[] = { 3, 14, 10, 16 };
 
-/* Activate the elevator. Returns 1 if already running, 0 on success. */
 int start_elevator(void)
 {
     mutex_lock(&elevator_mutex);
@@ -16,13 +15,12 @@ int start_elevator(void)
 
     if (elevator.state == OFFLINE)
         elevator.state = IDLE;
-    elevator.stopping = false;      /* also cancels a stop still in progress */
+    elevator.stopping = false;
 
     mutex_unlock(&elevator_mutex);
     return 0;
 }
 
-/* Add a pet to its start floor. Returns 1 for invalid input, 0 on success. */
 int issue_request(int start_floor, int destination_floor, int type)
 {
     struct pet *new_pet;
@@ -31,8 +29,6 @@ int issue_request(int start_floor, int destination_floor, int type)
         destination_floor < 1 || destination_floor > NUM_FLOORS ||
         start_floor == destination_floor || type < 0 || type > 3)
         return 1;
-
-    /* Allocate before locking: kmalloc may sleep */
     new_pet = kmalloc(sizeof(*new_pet), GFP_KERNEL);
     if (!new_pet)
         return -ENOMEM;
@@ -50,7 +46,7 @@ int issue_request(int start_floor, int destination_floor, int type)
     return 0;
 }
 
-/* Request deactivation. Returns 1 if already stopping, 0 otherwise. */
+
 int stop_elevator(void)
 {
     mutex_lock(&elevator_mutex);
@@ -60,8 +56,8 @@ int stop_elevator(void)
         return 1;
     }
     if (elevator.state != OFFLINE)
-        elevator.stopping = true;   /* kthread goes OFFLINE once empty */
-
+        elevator.stopping = true; 
+    
     mutex_unlock(&elevator_mutex);
     return 0;
 }
