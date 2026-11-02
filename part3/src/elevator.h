@@ -14,11 +14,11 @@
 
 enum elevator_state
 {
-    ELEVATOR_OFFLINE,
-    ELEVATOR_IDLE,
-    ELEVATOR_LOADING,
-    ELEVATOR_UP,
-    ELEVATOR_DOWN,
+    OFFLINE,
+    IDLE,
+    LOADING,
+    UP,
+    DOWN,
 };
 
 enum pet_type
@@ -31,7 +31,7 @@ enum pet_type
 
 struct pet
 {
-    struct list_head node;
+    struct list_head list;
     int start_floor;
     int destination_floor;
     enum pet_type type;
@@ -46,19 +46,21 @@ struct elevator
     bool is_stopping;
     int current_floor;
     int current_weight;
-    int onboard_pet_count;  // in elevator
-    int waiting_pet_count;  // alls pets waiting on all floor
-    int serviced_pet_count; // pets that have been serviced
+    int num_pets;     // in elevator
+    int num_waiting;  // alls pets waiting on all floor
+    int num_serviced; // pets that have been serviced
     struct list_head pets_onboard;
-    struct list_head waiting[ELEVATOR_MAX_FLOOR];
+    struct list_head floors[NUM_FLOORS];
 };
 
-int elevator_thread(void *data);
+extern struct elevator elevator;
+extern struct mutex elevator_mutex;
 
-bool elevator_has_floor_work_locked(struct elevator *elevator);
+int start_elevator(void);
+int issue_request(int start_floor, int destination_floor, int type);
+int stop_elevator(void);
 
-void elevator_service_floor_locked(struct elevator *elevator);
-
-int elevator_choose_next_floor_locked(struct elevator *elevator);
+int elevator_thread_start(void *data);
+void elevator_thread_stop(void);
 
 #endif /* PET_ELEVATOR_H */
