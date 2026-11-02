@@ -1,0 +1,2 @@
+Delete this file once you have added an actual for the project under this directory.
+This is a temporary file used to create the directory.
