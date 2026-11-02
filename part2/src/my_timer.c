@@ -14,8 +14,7 @@ static struct timespec64 prev_time;
 static bool prev_time_is_valid = false;
 static DEFINE_MUTEX(my_timer_mutex);
 
-static int my_timer_show(struct seq_file *output, void *unused)
-{
+static int my_timer_show(struct seq_file *output, void *unused){
     struct timespec64 current_time;
     struct timespec64 elapsed_time;
 
@@ -38,3 +37,24 @@ static int my_timer_show(struct seq_file *output, void *unused)
 
     return 0;
 }
+
+static int my_timer_open(struct inode *inode, struct file *file) {
+    return single_open(file, my_timer_show, NULL);
+}
+
+static const struct proc_ops my_timer_ops = {
+    .proc_open = my_timer_open,
+    .proc_read = seq_read,
+    .proc_lseek = seq_lseek,
+    .proc_release = single_release,
+};
+
+static int __init my_timer_init(void) {
+    //add proc entry
+}
+
+static void __exit my_timer_exit(void) {
+    proc_remove(my_timer_entry);
+}
+
+
