@@ -14,7 +14,8 @@ static struct timespec64 prev_time;
 static bool prev_time_is_valid = false;
 static DEFINE_MUTEX(my_timer_mutex);
 
-static int my_timer_show(struct seq_file *output, void *unused){
+static int my_timer_show(struct seq_file *output, void *unused)
+{
     struct timespec64 current_time;
     struct timespec64 elapsed_time;
 
@@ -38,7 +39,8 @@ static int my_timer_show(struct seq_file *output, void *unused){
     return 0;
 }
 
-static int my_timer_open(struct inode *inode, struct file *file) {
+static int my_timer_open(struct inode *inode, struct file *file)
+{
     return single_open(file, my_timer_show, NULL);
 }
 
@@ -49,12 +51,25 @@ static const struct proc_ops my_timer_ops = {
     .proc_release = single_release,
 };
 
-static int __init my_timer_init(void) {
-    //add proc entry
+static int __init my_timer_init(void)
+{
+    prev_time_is_valid = false;
+    my_timer_entry = proc_create(PROC_NAME, 0, NULL, &my_timer_ops);
+    if (!my_timer_entry)
+    {
+        pr_err("Failed to create /proc/%s\n", PROC_NAME);
+        return -ENOMEM;
+    }
+    return 0;
 }
 
-static void __exit my_timer_exit(void) {
+static void __exit my_timer_exit(void)
+{
     proc_remove(my_timer_entry);
 }
 
+module_init(my_timer_init);
+module_exit(my_timer_exit);
 
+// module uses GPL license. Linux needs this for kernel function access.
+MODULE_LICENSE("GPL");
