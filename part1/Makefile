@@ -4,7 +4,7 @@ CFLAGS := -Wall
 all: empty part1
 
 empty: empty.c
-  $(CC) $(CFLAGS) -o $@ $<
+	$(CC) $(CFLAGS) -o $@ $<
 
 part1: part1.c
 	$(CC) $(CFLAGS) -o $@ $<
