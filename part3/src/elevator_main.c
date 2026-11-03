@@ -8,8 +8,8 @@
 MODULE_LICENSE("GPL");
 MODULE_DESCRIPTION("Pet elevator kernel module");
 
-#define ENTRY_NAME    "elevator"
-#define PERMS         0644
+#define ENTRY_NAME "elevator"
+#define PERMS 0644
 #define PROC_BUF_SIZE 10000
 
 extern int (*STUB_start_elevator)(void);
@@ -21,8 +21,8 @@ DEFINE_MUTEX(elevator_mutex);
 
 static struct proc_dir_entry *elevator_entry;
 
-static const char *state_names[] = { "OFFLINE", "IDLE", "LOADING", "UP", "DOWN" };
-static const char pet_chars[] = { 'C', 'P', 'H', 'D' };
+static const char *state_names[] = {"OFFLINE", "IDLE", "LOADING", "UP", "DOWN"};
+static const char pet_chars[] = {'C', 'P', 'H', 'D'};
 
 static ssize_t elevator_read(struct file *file, char __user *ubuf,
                              size_t count, loff_t *ppos)
@@ -51,7 +51,8 @@ static ssize_t elevator_read(struct file *file, char __user *ubuf,
                          pet_chars[p->type], p->dest_floor);
     len += scnprintf(buf + len, PROC_BUF_SIZE - len, "\n\n");
 
-    for (floor = NUM_FLOORS; floor >= 1; floor--) {
+    for (floor = NUM_FLOORS; floor >= 1; floor--)
+    {
         waiting_here = 0;
         list_for_each_entry(p, &elevator.floors[floor - 1], list)
             waiting_here++;
@@ -98,7 +99,8 @@ static int __init elevator_init(void)
         return -ENOMEM;
 
     ret = elevator_thread_start();
-    if (ret) {
+    if (ret)
+    {
         proc_remove(elevator_entry);
         return ret;
     }
@@ -107,6 +109,31 @@ static int __init elevator_init(void)
     STUB_issue_request = issue_request;
     STUB_stop_elevator = stop_elevator;
     return 0;
+}
+
+static void free_all_pets(void)
+{
+    struct pet *pet, *next;
+    int floor;
+
+    list_for_each_entry_safe(pet, next, &elevator.pets, list)
+    {
+        list_del(&pet->list);
+        kfree(pet);
+    }
+
+    for (floor = 0; floor < NUM_FLOORS; floor++)
+    {
+        list_for_each_entry_safe(pet, next, &elevator.floors[floor], list)
+        {
+            list_del(&pet->list);
+            kfree(pet);
+        }
+    }
+
+    elevator.num_pets = 0;
+    elevator.num_waiting = 0;
+    elevator.load_weight = 0;
 }
 
 static void __exit elevator_exit(void)
