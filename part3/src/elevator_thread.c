@@ -44,7 +44,7 @@ static void unload_pets(void)
 
     list_for_each_entry_safe(pet, next, &elevator.pets, list)
     {
-        if (pet->dest_floor == elevator.current_floor)
+        if (pet->dest_floor != elevator.current_floor)
             continue;
         
         list_del(&pet->list);

@@ -8,7 +8,7 @@ int start_elevator(void)
 {
     mutex_lock(&elevator_mutex);
 
-    if (elevator.state != OFFLINE && !elevator.stopping) {
+    if (elevator.state != OFFLINE) {
         mutex_unlock(&elevator_mutex);
         return 1;
     }
