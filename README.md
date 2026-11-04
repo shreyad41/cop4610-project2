@@ -1,8 +1,8 @@
 # cop4610-project2
 
-"A Linux kernel program supporting system call tracing, a timer module, 
+A Linux kernel program supporting system call tracing, a timer module, 
 and a pet elevator module supporting FIFO boarding, thread management, 
-mutex synchronization, scheduling, and proc status reporting."
+mutex synchronization, scheduling, and proc status reporting.
 
 ## Group Members
 - **Shreya Dangol**: spd23@fsu.edu
@@ -27,7 +27,35 @@ mutex synchronization, scheduling, and proc status reporting."
 ## File Listing
 
 ```
-
+cop4610-project2-main/
+├── .gitignore
+├── .vscode/
+│   ├── c_cpp_properties.json
+│   ├── launch.json
+│   └── settings.json
+├── Makefile
+├── README.md
+├── part1/
+│   ├── Makefile
+│   ├── empty.c
+│   ├── empty.trace
+│   ├── part1.c
+│   └── part1.trace
+├── part2/
+│   ├── Makefile
+│   └── src/
+│       └── my_timer.c
+└── part3/
+    ├── Makefile
+    ├── sys_call.c
+    ├── syscalls.c
+    ├── wrappers.h
+    └── src/
+        ├── elevator.h
+        ├── elevator.txt
+        ├── elevator_main.c
+        ├── elevator_syscalls.c
+        └── elevator_thread.c
 
 ```
 ## How to Compile & Execute
