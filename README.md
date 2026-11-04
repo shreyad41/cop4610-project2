@@ -43,8 +43,7 @@
 ## Development Log
 
 ### Shreya Dangol
-
-
+Contributed to project planning, repository setup, kernel development, and elevator module implementation. Established SSH-based repository access from the lab VM and completed Part 1 by developing `empty.c` and `part1.c` and generating and validating their corresponding `strace` output. For Parts 3a and 3b, integrated the three elevator system calls into the Linux kernel source, compiled and installed Linux 6.16.12, configured GRUB to boot the updated kernel, and verified system call functionality using `syscheck`. Implemented the elevator module for Parts 3c through 3f, incorporating kernel thread management, per-floor pet queues, `issue_request` functionality, FIFO boarding, mutex synchronization, the LOOK scheduling algorithm, and `/proc/elevator` status reporting. Conducted functional testing to verify capacity and weight constraints, elevator stopping behavior, invalid start and stop requests, and proper kernel module unloading.
 ### Sophia Arenas
 
 
