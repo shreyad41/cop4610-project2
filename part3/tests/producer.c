@@ -18,10 +18,10 @@ int main(int argc, char **argv)
     for (i = 0; i < num; i++)
     {
         type = rnd(0, 3);
-        start = rnd(1, 5);
+        start = rnd(1, 6);
         do
         {
-            dest = rnd(1, 5);
+            dest = rnd(1, 6);
         } while (dest == start);
         long ret = issue_request(start, dest, type);
         printf("Issue (%d, %d, %d) returned %ld\n", start, dest, type, ret);
