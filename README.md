@@ -29,10 +29,6 @@ mutex synchronization, scheduling, and proc status reporting.
 ```
 cop4610-project2-main/
 ├── .gitignore
-├── .vscode/
-│   ├── c_cpp_properties.json
-│   ├── launch.json
-│   └── settings.json
 ├── Makefile
 ├── README.md
 ├── part1/
@@ -47,12 +43,10 @@ cop4610-project2-main/
 │       └── my_timer.c
 └── part3/
     ├── Makefile
-    ├── sys_call.c
     ├── syscalls.c
     ├── wrappers.h
     └── src/
         ├── elevator.h
-        ├── elevator.txt
         ├── elevator_main.c
         ├── elevator_syscalls.c
         └── elevator_thread.c
