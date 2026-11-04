@@ -73,3 +73,4 @@ module_exit(my_timer_exit);
 
 // module uses GPL license. Linux needs this for kernel function access.
 MODULE_LICENSE("GPL");
+MODULE_DESCRIPTION("Time module that reports current and elapsed time");
