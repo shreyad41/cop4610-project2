@@ -53,7 +53,7 @@ cop4610-project2-main/
 
 ```
 ## How to Compile & Execute
-###Requirements
+Requirements:
 - **Compiler**: `gcc` and `make`
 - **Kernel**: Linux 6.16.12 built with system calls 548-550. Confirm with `uname -r`
 - **Tools**: `strace` (Part 1), kernel headers for the running kernel (Parts 2 and 3)
