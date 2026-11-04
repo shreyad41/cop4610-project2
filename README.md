@@ -54,6 +54,53 @@ cop4610-project2-main/
 ```
 ## How to Compile & Execute
 
+###Requirments
+- **Compiler**: `gcc` and `make`
+- **Kernel**: Linux 6.16.12 built with system calls 548-550. Confirm with `uname -r`
+- **Tools**: `strace` (Part 1), kernel headers for the running kernel (Parts 2 and 3)
+
+### Compile Part 1: System Call Tracing
+```bash
+cd part1
+make
+strace -o empty.trace ./empty
+strace -o part1.trace ./part1
+wc -l empty.trace part1.trace
+```
+### Compile Part 2: Timer Kernel Module
+```bash
+cd part2
+make
+sudo insmod my_timer.ko
+cat /proc/timer; sleep1; cat /proc/timer; sleep 3; cat /proc/timer
+sudo rmmod my_timer
+```
+### Compile Part 3: Elevator Kernel Module
+**Kernel setup (one time)**: copy `part3/syscalls.c` to `[kernel]/syscalls/syscalls.c`,
+add `obj-y:= syscalls.o` in `[kernel]/syscalls/Makefile`, register 548-550 in
+`arch/x86/entry/syscalls/syscall_64.tbl`, and the prototypes to `include/linux/syscalls.h`,
+add `syscalls/` to `core-y` in the top-level kernel `Makefile`, then:
+```bash
+make menuconfig
+make -j$(nproc)
+sudo make modules_install
+sudo make install
+sudo reboot
+```
+
+**Build and load the module:**
+```bash
+cd part3
+make
+sudo insmod elevator.ko
+```
+`make` builds `elevator.ko` in `part3/`
+
+**Unload and clean up:**
+```bash
+sudo rmmod elevator
+make clean
+```
 
 ## Development Log
 
@@ -78,14 +125,25 @@ Verified graceful shutdown with pets onboard, continued service after restarting
 reads during movement. Recorded test results to document observed behavior.
 
 ### Leyla Dibra
+Developed part 3, by implementing `syscalls.c`, `elevator.h`, `elevator_syscalls.c`, `elevator_thread.c`, and `elevator_main.c`
+'Wrote `syscalls.c` with `STUB_*` hooks and added it to the kernel source; registered calls 548–550 in `syscall_64.tbl` and `syscalls.h` (part 3a)
+Assisted in the building of the 6.16,12 kernel with the new system calls on the lab VM (part 3b)
+Wrote `elevator.h` shared structures, `elevator_syscalls.c` with mutex-protected handlers, and `elevator_thread.c` kthread loop that sleeps without holding the lock (parts 3c, 3e)
+Wrote the module init/exit syscall hookup and proc read in `elevator_main.c`; verified build, load, and syscall return values on the VM
+Tested all parts from a clean clone of `main`: Part 1 traces, Part 2 timer, Part 3 start/stop/restart, 3-minute stress test, and unloading with pets waiting; checked `dmesg` for kernel errors
 
+## Bugs
+No known bugs at time of submission
+
+## Extra Credit 
+N/A
 
 ## Description of Group Meetings
 **Meeting 1 — Task division:** The group met to divide the eight project
 parts among the three members, assigning each person parts based on
 availability and interest (see Division of Labor table above).
 
-**Meeting 2 — Integration check:** The group reviewed the timer module, kernel 
+**Meeting 2 — Integration check:** The group met to ensure differing parts were being integrated properly together. Reviewed the timer module, kernel 
 modifications, and elevator components to ensure compatible function declarations, 
 shared structures, and naming conventions. Build files were updated to compile the 
 separate elevator source files together.
