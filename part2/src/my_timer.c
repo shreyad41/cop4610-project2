@@ -7,7 +7,7 @@
 #include <linux/time64.h>
 #include <linux/timekeeping.h>
 
-#define PROC_NAME "my_timer"
+#define PROC_NAME "timer"
 
 static struct proc_dir_entry *my_timer_entry;
 static struct timespec64 prev_time;
@@ -22,7 +22,7 @@ static int my_timer_show(struct seq_file *output, void *unused)
     mutex_lock(&my_timer_mutex);
     ktime_get_real_ts64(&current_time);
 
-    seq_printf(output, "Current time: %lld.%09ldh\n",
+    seq_printf(output, "current time: %lld.%09ld\n",
                (long long)current_time.tv_sec, current_time.tv_nsec);
 
     if (prev_time_is_valid)
